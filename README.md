@@ -77,17 +77,11 @@ The plugin works out of the box with these defaults:
 
 ## 🎮 Godot Setup
 
-1. **Enable LSP in Godot**:
-   - Go to `Editor Settings`
-   - Navigate to `Network → Language Server`
-   - Enable `Use Language Server`
-   - Optionally enable `Use Thread` for better performance
-
-2. **Start your Godot project**:
+1. **Start your Godot project**:
    - Open your project in Godot
    - The LSP server will automatically start
 
-3. **Open GDScript files in Neovim**:
+2. **Open GDScript files in Neovim**:
    - The plugin will automatically detect your project and connect to the LSP
 
 ## 🔧 Commands
