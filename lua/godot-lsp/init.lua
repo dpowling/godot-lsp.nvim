@@ -79,6 +79,14 @@ local function start_godot_lsp()
 		cmd = cmd,
 		root_dir = root,
 		filetypes = { "gdscript" },
+		on_attach = function(client, bufnr)
+			debug_print("LSP attached to buffer", bufnr)
+		end,
+	}, {
+		-- Automatically attach to all GDScript buffers in this project
+		reuse_client = function(client, config)
+			return client.name == "gdscript" and client.root_dir == config.root_dir
+		end,
 	})
 
 	info_print("LSP started for project:", vim.fn.fnamemodify(root, ":t"))
@@ -115,6 +123,32 @@ function M.setup(opts)
 				debug_print("BufWinEnter .gd file detected")
 				-- Small delay to ensure filetype is set
 				vim.defer_fn(start_godot_lsp, 50)
+			end
+		end,
+		group = augroup,
+	})
+
+	-- Ensure LSP attaches to new GDScript buffers opened via goto definition, etc.
+	vim.api.nvim_create_autocmd("BufEnter", {
+		pattern = "*.gd",
+		callback = function()
+			if vim.bo.filetype == "gdscript" then
+				local root = vim.fs.root(0, { "project.godot" })
+				if root and started_projects[root] then
+					-- Check if this buffer already has an LSP client attached
+					local clients = vim.lsp.get_clients({ bufnr = 0, name = "gdscript" })
+					if #clients == 0 then
+						debug_print("Attaching existing LSP to new buffer")
+						-- Find the existing client for this project
+						local all_clients = vim.lsp.get_clients({ name = "gdscript" })
+						for _, client in ipairs(all_clients) do
+							if client.root_dir == root then
+								vim.lsp.buf_attach_client(0, client.id)
+								break
+							end
+						end
+					end
+				end
 			end
 		end,
 		group = augroup,
