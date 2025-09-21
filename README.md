@@ -13,8 +13,7 @@ A simple Neovim plugin for connecting to Godot's built-in Language Server Protoc
 ## 📋 Requirements
 
 - Neovim 0.8+ (for `vim.lsp.rpc.connect`)
-- Godot 4.x with LSP enabled
-- Your Godot project must have LSP enabled in the editor settings
+- Godot 4.x
 
 ## 📦 Installation
 
@@ -151,4 +150,3 @@ MIT License - see LICENSE file for details.
 
 - Thanks to the Godot team for providing an excellent built-in LSP server
 - Inspired by the Neovim LSP ecosystem and the need for a simple Godot LSP solution
-
